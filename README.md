@@ -47,3 +47,29 @@ cmake -G Xcode ..
 Polytonic created a project called [Glitter](https://github.com/Polytonic/Glitter) that is a dead-simple boilerplate for OpenGL. 
 Everything you need to run a single LearnOpenGL Project (including all libraries) and just that; nothing more. 
 Perfect if you want to follow along with the chapters, without the hassle of having to manually compile and link all third party libraries!
+
+## FAQ
+1. problem: Undefined symbols for architecture x86_64!
+```
+a. change make file like below:
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a60f028..a5e7fc0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -46,9 +46,10 @@ elseif(APPLE)
+   FIND_LIBRARY(OpenGL_LIBRARY OpenGL)
+   FIND_LIBRARY(IOKit_LIBRARY IOKit)
+   FIND_LIBRARY(CoreVideo_LIBRARY CoreVideo)
++  FIND_PACKAGE(Freetype REQUIRED)
+   MARK_AS_ADVANCED(COCOA_LIBRARY OpenGL_LIBRARY)
+   SET(APPLE_LIBS ${COCOA_LIBRARY} ${IOKit_LIBRARY} ${OpenGL_LIBRARY} ${CoreVideo_LIBRARY})
+-  SET(APPLE_LIBS ${APPLE_LIBS} ${GLFW3_LIBRARY} ${ASSIMP_LIBRARY})
++  SET(APPLE_LIBS ${APPLE_LIBS} ${GLFW3_LIBRARY} ${ASSIMP_LIBRARY} ${FREETYPE_LIBRARIES})
+   set(LIBS ${LIBS} ${APPLE_LIBS})
+ else()
+   set(LIBS )
+
+b. `brew install freetype`
+c. cd build && cmake ../. && make -j8
+```
